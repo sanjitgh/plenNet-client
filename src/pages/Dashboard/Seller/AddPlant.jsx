@@ -30,6 +30,7 @@ const AddPlant = () => {
     const saller = {
       name: user?.displayName,
       email: user?.email,
+      profile_image: user?.photoURL,
     };
 
     // create plant data in a object

@@ -26,13 +26,12 @@ const PlantDetails = () => {
       return data;
     },
   });
-  console.log(plant);
   const { name, image, category, description, price, quantity, saller } = plant;
   if (isLoading) return <LoadingSpinner></LoadingSpinner>;
   return (
     <Container>
       <Helmet>
-        <title>{name}</title>
+        <title>{name} | PlantNet</title>
       </Helmet>
       <div className="mx-auto flex flex-col lg:flex-row justify-between w-full gap-12">
         {/* Header */}
@@ -77,7 +76,7 @@ const PlantDetails = () => {
               width="30"
               alt="Avatar"
               referrerPolicy="no-referrer"
-              src="https://lh3.googleusercontent.com/a/ACg8ocKUMU3XIX-JSUB80Gj_bYIWfYudpibgdwZE1xqmAGxHASgdvCZZ=s96-c"
+              src={saller?.profile_image}
             />
           </div>
           <hr className="my-6" />
@@ -104,7 +103,7 @@ const PlantDetails = () => {
           </div>
           <hr className="my-6" />
 
-          <PurchaseModal closeModal={closeModal} isOpen={isOpen} />
+          <PurchaseModal plant={plant} closeModal={closeModal} isOpen={isOpen} />
         </div>
       </div>
     </Container>
