@@ -17,7 +17,11 @@ const PlantDetails = () => {
     setIsOpen(false);
   };
 
-  const { data: plant = [], isLoading } = useQuery({
+  const {
+    data: plant = {},
+    isLoading,
+    refetch,
+  } = useQuery({
     queryKey: ["plant", id],
     queryFn: async () => {
       const { data } = await axios(
@@ -103,7 +107,12 @@ const PlantDetails = () => {
           </div>
           <hr className="my-6" />
 
-          <PurchaseModal plant={plant} closeModal={closeModal} isOpen={isOpen} />
+          <PurchaseModal
+            refetch={refetch}
+            plant={plant}
+            closeModal={closeModal}
+            isOpen={isOpen}
+          />
         </div>
       </div>
     </Container>

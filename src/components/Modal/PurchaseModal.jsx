@@ -1,4 +1,3 @@
-
 import {
   Dialog,
   Transition,
@@ -11,10 +10,11 @@ import Button from "../Shared/Button/Button";
 import toast from "react-hot-toast";
 import useAuth from "../../hooks/useAuth";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
+import { useNavigate } from "react-router-dom";
 
-
-const PurchaseModal = ({ closeModal, isOpen, plant }) => {
+const PurchaseModal = ({ closeModal, isOpen, plant, refetch }) => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const axiosSecure = useAxiosSecure();
   const { _id, name, category, price, quantity, saller } = plant;
   const [totalQuantity, setTotalQuantity] = useState(1);
@@ -32,7 +32,6 @@ const PurchaseModal = ({ closeModal, isOpen, plant }) => {
     address: "",
     status: "Pending",
   });
-  console.table(purchaseInfo);
 
   const handleQuantity = (value) => {
     if (value > quantity) {
@@ -52,8 +51,16 @@ const PurchaseModal = ({ closeModal, isOpen, plant }) => {
 
   const handlePurchase = async () => {
     try {
+      // save data in db
       await axiosSecure.post("/order", purchaseInfo);
+      // decrease quantity for plant collection
+      await axiosSecure.patch(`/plants/quantity/${_id}`, {
+        quantityToUpdate: totalQuantity,
+        status: 'decrease'
+      });
       toast.success("Order successfull!");
+      refetch();
+      navigate("/dashboard/my-orders");
     } catch (err) {
       console.log(err);
     } finally {
